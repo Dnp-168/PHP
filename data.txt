@@ -1,0 +1,88 @@
+[5/26, 12:13 PM] Deep: class Your_Controller extends CI_Controller {
+    public function index() {
+        $data = array(
+            'USA' => array(
+                'New York' => 10.99,
+                'California' => 9.99,
+                'Texas' => 8.99
+            ),
+            'Canada' => array(
+                'Ontario' => 7.99,
+                'Quebec' => 6.99,
+                'British Columbia' => 5.99
+            ),
+            'Australia' => array(
+                'New South Wales' => 11.99,
+                'Victoria' => 10.99,
+                'Queensland' => 9.99
+            )
+        );
+
+        // Pass the multidimensional array to the view
+        $data['countries'] = $data;
+
+        // Load the view and pass the data
+        $this->load->view('your_view', $data);
+    }
+}
+[5/26, 12:13 PM] Deep: $(document).ready(function() {
+    // Initialize datepicker
+    $('#datepicker').datepicker();
+
+    // Add row button click event
+    $('#add-row-btn').click(function() {
+        var country = $('#country-dropdown').val();
+        var stateDropdown = '<select class="state-dropdown" name="state[]"><option value="">Select State</option>';
+
+        // Get states for the selected country
+        var states = <?php echo json_encode($countries); ?>;
+        var countryStates = states[country];
+
+        // Populate the state dropdown with states for the selected country
+        $.each(countryStates, function(state, price) {
+            stateDropdown += '<option value="' + state + '">' + state + '</option>';
+        });
+
+        stateDropdown += '</select>';
+
+        // Create a new row and append it to the table
+        var newRow = '<tr>' +
+            '<td>' + country + '</td>' +
+            '<td>' + stateDropdown + '</td>' +
+            '<td><input type="text" name="input[]"></td>' +
+            '<td><input type="text" class="price" value=""></td>' +
+            '<td><input type="text" class="total" value=""></td>' +
+            '<td><button type="button" class="remove-row-btn">Remove</button></td>' +
+            '</tr>';
+
+        $('#data-table tbody').append(newRow);
+    });
+
+    // Remove row button click event (delegated event handling)
+    $('#data-table').on('click', '.remove-row-btn', function() {
+        $(this).closest('tr').remove();
+    });
+
+    // State dropdown change event
+    $('#data-table').on('change', '.state-dropdown', function() {
+        var selectedState = $(this).val();
+        var row = $(this).closest('tr');
+        var price = row.find('.price');
+        var input = row.find('input[name="input[]"]');
+        var total = row.find('.total');
+
+        if (selectedState !== '') {
+            var country = row.find('td:first-child').text();
+            var states = <?php echo json_encode($countries); ?>;
+            var statePrice = states[country][selectedState];
+            price.val(statePrice);
+
+            var userInput = parseFloat(input.val());
+            var totalPrice = isNaN(userInput) ? 0 : userInput * parseFloat(statePrice);
+            total.val(totalPrice.toFixed(2));
+        } else {
+            price.val('');
+            total.val('');
+        }
+    });
+});
