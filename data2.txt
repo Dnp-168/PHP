@@ -1,0 +1,114 @@
+$(document).ready(function() {
+    // Handle country dropdown change event
+    $('#country-dropdown').change(function() {
+        var selectedCountry = $(this).val();
+
+        // Perform any actions based on the selected country (if needed)
+    });
+
+    // Handle Add Row button click event
+    $('#add-row').click(function() {
+        var country = $('#country-dropdown').val();
+
+        if (country === '') {
+            alert('Please select a country first.');
+            return;
+        }
+
+        var stateOptions = '';
+        var states = <?php echo json_encode($countries); ?>;
+        var countryStates = states[country];
+
+        // Generate state options for the selected country
+        $.each(countryStates, function(state, price) {
+            stateOptions += '<option value="' + price + '">' + state + '</option>';
+        });
+
+        var rowHtml = '<tr>' +
+            '<td>' + country + '</td>' +
+            '<td><select class="state-dropdown" name="state[]">' + stateOptions + '</select></td>' +
+            '<td><input type="number" class="quantity" name="quantity[]"></td>' +
+            '<td><input type="text" class="result" name="result[]" readonly></td>' +
+            '<td><button type="button" class="remove-row">Remove</button></td>' +
+            '</tr>';
+
+        $('#myTable tbody').append(rowHtml);
+    });
+
+    // Handle Remove Row button click event
+    $('#myTable').on('click', '.remove-row', function() {
+        $(this).closest('tr').remove();
+    });
+
+    // Handle form submission
+    $('#myForm').submit(function(e) {
+        e.preventDefault();
+
+        var formData = $(this).serializeArray();
+        var resultArray = [];
+
+        // Process the form data and calculate the result
+        $.each(formData, function(index, field) {
+            var name = field.name;
+            var value = field.value;
+
+            if (name === 'state[]') {
+                var state = $('[name="state[]"]').eq(index).find('option:selected').text();
+                var price = parseFloat(value);
+                var quantity = parseFloat($('[name="quantity[]"]').eq(index).val());
+                var result = price * quantity;
+
+                resultArray.push({
+                    'country': country,
+                    'state': state,
+                    'price': price,
+                    'quantity': quantity,
+                    'result': result
+                });
+            }
+        });
+
+        // Print the result array
+        console.log(resultArray);
+
+        // Perform AJAX submission or any other processing as needed
+    });
+});
+
+
+
+class Your_Controller extends CI_Controller {
+    public function index() {
+        // Your existing code here
+        // ...
+
+        $this->load->view('your_view', $data);
+    }
+
+    public function process_form() {
+        $formData = $this->input->post();
+
+        $resultArray = array();
+
+        for ($i = 0; $i < count($formData['state']); $i++) {
+            $country = $formData['country'];
+            $state = $formData['state'][$i];
+            $price = $formData['state'][$i];
+            $quantity = $formData['quantity'][$i];
+            $result = $price * $quantity;
+
+            $resultArray[] = array(
+                'country' => $country,
+                'state' => $state,
+                'price' => $price,
+                'quantity' => $quantity,
+                'result' => $result
+            );
+        }
+
+        // Print the result array
+        print_r($resultArray);
+
+        // Perform any other processing as needed
+    }
+}
