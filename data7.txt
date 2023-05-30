@@ -1,0 +1,19 @@
+<!-- Form -->
+<form id="myForm" method="post" action="<?php echo site_url('your_controller'); ?>">
+    <!-- Country dropdown -->
+    <select id="country-dropdown" name="country">
+        <option value="">Select Country</option>
+        <?php foreach ($countries as $country => $states): ?>
+            <option value="<?php echo $country; ?>" <?php echo set_select('country', $country); ?>><?php echo $country; ?></option>
+        <?php endforeach; ?>
+    </select>
+    <?php echo form_error('country', '<div class="error">', '</div>'); ?>
+
+    <!-- Datepicker -->
+    <input type="text" id="datepicker" name="date" placeholder="Select Date" value="<?php echo set_value('date'); ?>">
+    <?php echo form_error('date', '<div class="error">', '</div>'); ?>
+
+    <!-- ... Rest of the form ... -->
+
+    <button type="submit">Submit</button>
+</form>

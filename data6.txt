@@ -1,0 +1,40 @@
+$(document).ready(function() {
+    // Add click event on submit button
+    $('#myForm').submit(function(e) {
+        e.preventDefault();
+
+        // Perform form validation
+        var isValid = true;
+        $('.error').remove(); // Remove any existing error messages
+
+        // Validate each table row
+        $('#data-table tbody tr').each(function() {
+            var countryDropdown = $(this).find('.country-dropdown');
+            var stateDropdown = $(this).find('.state-dropdown');
+            var userInput = $(this).find('.user-input');
+            var resultInput = $(this).find('.result');
+
+            if (countryDropdown.val() === '') {
+                countryDropdown.after('<div class="error">Please select a country.</div>');
+                isValid = false;
+            }
+
+            if (stateDropdown.val() === '') {
+                stateDropdown.after('<div class="error">Please select a state.</div>');
+                isValid = false;
+            }
+
+            if (userInput.val() === '') {
+                userInput.after('<div class="error">Please enter a value.</div>');
+                isValid = false;
+            }
+        });
+
+        if (isValid) {
+            // Form is valid, submit the form
+            this.submit();
+        }
+    });
+
+    // ... Rest of the JavaScript code ...
+});

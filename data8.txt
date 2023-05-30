@@ -1,0 +1,22 @@
+class Your_Controller extends CI_Controller {
+    public function index() {
+        // Load the form validation library
+        $this->load->library('form_validation');
+
+        // Set validation rules for the form fields
+        $this->form_validation->set_rules('country', 'Country', 'required');
+        $this->form_validation->set_rules('date', 'Date', 'required');
+
+        if ($this->form_validation->run() == false) {
+            // Validation failed, reload the view with error messages
+            $this->load->view('your_view');
+        } else {
+            // Validation successful, process the form data
+            $formData = $this->input->post();
+
+            // Process the form data as required
+
+            // Redirect or load a success view
+        }
+    }
+}
