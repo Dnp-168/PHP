@@ -1,0 +1,33 @@
+<!-- Form -->
+<form id="myForm">
+    <!-- Country dropdown -->
+    <select id="country-dropdown" name="country">
+        <option value="">Select Country</option>
+        <?php foreach ($countries as $country => $states): ?>
+            <option value="<?php echo $country; ?>"><?php echo $country; ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <!-- Datepicker -->
+    <input type="text" id="datepicker" name="date" placeholder="Select Date">
+
+    <button type="button" id="add-row">Add Row</button>
+
+    <!-- Table -->
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Country</th>
+                <th>State</th>
+                <th>Input</th>
+                <th>Result</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
+    
+    <button type="submit">Submit</button>
+</form>

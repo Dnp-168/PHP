@@ -1,0 +1,71 @@
+$(document).ready(function() {
+    // Add change event on country dropdown
+    $('#country-dropdown').change(function() {
+        var selectedCountry = $(this).val();
+        var states = <?php echo json_encode($countries); ?>;
+        var countryStates = states[selectedCountry];
+
+        // Clear the state dropdown
+        var stateDropdown = '<select class="state-dropdown" name="state[]">';
+        stateDropdown += '<option value="">Select State</option>';
+        $.each(countryStates, function(state, price) {
+            stateDropdown += '<option value="' + state + '">' + state + '</option>';
+        });
+        stateDropdown += '</select>';
+
+        // Add a new row to the table
+        var newRow = '<tr>';
+        newRow += '<td>' + selectedCountry + '</td>';
+        newRow += '<td>' + stateDropdown + '</td>';
+        newRow += '<td><input type="text" class="user-input" name="input[]"></td>';
+        newRow += '<td><input type="text" class="result" readonly></td>';
+        newRow += '<td><button type="button" class="remove-row">Remove</button></td>';
+        newRow += '</tr>';
+
+        $('#data-table tbody').append(newRow);
+    });
+
+    // Add click event on add row button
+    $('#add-row').click(function() {
+        var selectedCountry = $('#country-dropdown').val();
+        var states = <?php echo json_encode($countries); ?>;
+        var countryStates = states[selectedCountry];
+
+        // Clear the state dropdown
+        var stateDropdown = '<select class="state-dropdown" name="state[]">';
+        stateDropdown += '<option value="">Select State</option>';
+        $.each(countryStates, function(state, price) {
+            stateDropdown += '<option value="' + state + '">' + state + '</option>';
+        });
+        stateDropdown += '</select>';
+
+        // Add a new row to the table
+        var newRow = '<tr>';
+        newRow += '<td>' + selectedCountry + '</td>';
+        newRow += '<td>' + stateDropdown + '</td>';
+        newRow += '<td><input type="text" class="user-input" name="input[]"></td>';
+        newRow += '<td><input type="text" class="result" readonly></td>';
+        newRow += '<td><button type="button" class="remove-row">Remove</button></td>';
+        newRow += '</tr>';
+
+        $('#data-table tbody').append(newRow);
+    });
+
+    // Add click event on remove row button (delegate event)
+    $('#data-table').on('click', '.remove-row', function() {
+        $(this).closest('tr').remove();
+    });
+
+    // Add submit event on form
+    $('#myForm').submit(function(e) {
+        e.preventDefault();
+
+        var formData = $(this).serializeArray();
+        console.log(formData);
+
+        // Perform additional actions, such as sending data via AJAX or processing it on the server
+    });
+
+    // Initialize datepicker
+    $('#datepicker').datepicker();
+});
